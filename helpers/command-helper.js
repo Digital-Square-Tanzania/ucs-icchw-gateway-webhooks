@@ -90,7 +90,8 @@ class SpawnCommand {
      */
     process.on("exit", () => {
       if (!res.writableEnded) {
-        ResponseHelper.api(req, res, 200, true, `${command} process completed`, null);
+        console.log(`⚠️ [WARN] Process exited but response wasn't closed manually.`);
+        res.end(); // just end if not already ended
       }
     });
   }

@@ -7,7 +7,7 @@ deployTestBackend:
 	git fetch && \
 	git merge origin/dev -m "Automerged by Makefile" && \
 	npm install --silent && \
-	pm2 restart ucs-icchw-gateway-backend && \
+	pm2 restart gateway-backend && \
 	echo "$(tput setaf 3)Test Backend Deployment Completed.$(tput sgr0)" && cd -
 
 deployProdBackend:
@@ -17,7 +17,7 @@ deployProdBackend:
 	git fetch && \
 	git merge origin/main -m "Automerged by Makefile" && \
 	npm install --silent && \
-	pm2 restart ucs-icchw-gateway-backend && \
+	pm2 restart gateway-backend && \
 	echo "$(tput setaf 3)Prod Backend Deployment Completed.$(tput sgr0)" && cd -
 
 deployTestFrontend:
@@ -47,7 +47,7 @@ deployTestWebhooks:
 	git fetch && \
 	git merge origin/dev -m "Automerged by Makefile" && \
 	npm install --silent && \
-	pm2 restart ucs-icchw-gateway-webhooks && \
+	pm2 restart gateway-webhooks && \
 	echo "$(tput setaf 3)Test Webhooks Deployment Completed.$(tput sgr0)" && cd -
 
 deployProdWebhooks:
@@ -57,5 +57,5 @@ deployProdWebhooks:
 	git fetch && \
 	git merge origin/main -m "Automerged by Makefile" && \
 	npm install --silent && \
-	pm2 restart ucs-icchw-gateway-webhooks && \
+	pm2 restart gateway-webhooks && \
 	echo "$(tput setaf 3)Prod Webhooks Deployment Completed.$(tput sgr0)" && cd -
