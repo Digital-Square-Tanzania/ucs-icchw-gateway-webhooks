@@ -34,65 +34,34 @@ class SpawnCommand {
   run(command, args, cwd, req, res, next) {
     const process = spawn(command, args, { cwd, shell: true });
 
-    res.setHeader("Content-Type", "text/plain");
+    let output = "";
+    let errorOutput = "";
 
-    /**
-     * Event listener for process standard output (stdout) data.
-     * Logs and writes the stdout data to the response.
-     * @param {Buffer} data - The data from stdout.
-     */
     process.stdout.on("data", (data) => {
-      const message = data.toString();
-      console.log(message);
-      res.write(message);
+      output += data.toString();
+      console.log(data.toString());
     });
 
-    /**
-     * Event listener for process standard error (stderr) data.
-     * Logs and writes the stderr data to the response.
-     * @param {Buffer} data - The data from stderr.
-     */
     process.stderr.on("data", (data) => {
-      const message = data.toString();
-      console.error(message);
-      res.write(message);
+      errorOutput += data.toString();
+      console.error(data.toString());
     });
 
-    /**
-     * Event listener for process error events.
-     * Logs the error and writes it to the response, then handles the error using ErrorHelper.
-     * @param {Error} err - The error object.
-     */
-    process.on("error", (err) => {
-      const errorMessage = `Error during ${command} execution: ${err.message}\n`;
-      console.error(errorMessage);
-      res.write(errorMessage);
-      res.end();
-
-      this.errorHelper.handleError(err, req, res, next);
-    });
-
-    /**
-     * Event listener for process close events.
-     * Logs and writes the process exit code to the response.
-     * @param {number} code - The exit code of the process.
-     */
     process.on("close", (code) => {
-      const closeMessage = `\n${command} exited with code ${code}`;
-      console.log(closeMessage);
-      res.write(closeMessage);
-      res.end();
+      const message = `${command} exited with code ${code}`;
+      console.log(message);
+
+      // Send response to GitHub only once, clean and structured
+      if (code === 0) {
+        ResponseHelper.api(req, res, 200, true, "Command executed successfully.", null);
+      } else {
+        ResponseHelper.api(req, res, 500, false, "Command failed.", { output, errorOutput });
+      }
     });
 
-    /**
-     * Event listener for process exit events.
-     * Ensures the response is properly ended if not already done.
-     */
-    process.on("exit", () => {
-      if (!res.writableEnded) {
-        console.log(`⚠️ [WARN] Process exited but response wasn't closed manually.`);
-        res.end(); // just end if not already ended
-      }
+    process.on("error", (err) => {
+      console.error(`Spawn error: ${err.message}`);
+      this.errorHelper.handleError(err, req, res, next);
     });
   }
 }
