@@ -94,4 +94,14 @@ deployPeersTestFrontend:
 	npm run build --silent && \
 	echo "$(tput setaf 3)Peers Test Frontend Deployment Completed.$(tput sgr0)" && cd -
 
+deployPeersProdFrontend:
+	echo "$(tput setaf 2)Deploying Peers Prod Frontend...$(tput sgr0)"
+	cd /opt/ucs-peers-register-frontend && \
+	git stash && git checkout -m main && \
+	git fetch && \
+	git merge origin/main -m "Automerged by Makefile" && \
+	npm install --silent && \
+	npm run build --silent && \
+	echo "$(tput setaf 3)Peers Prod Frontend Deployment Completed.$(tput sgr0)" && cd -
+
 	

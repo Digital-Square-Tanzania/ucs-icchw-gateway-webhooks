@@ -27,7 +27,7 @@ class BackendController {
    */
   async updateTest(req, res, next) {
     try {
-      await this.backendService.updateTest(req, res);
+      await this.backendService.updateTest(req, res, next);
     } catch (err) {
       next(err);
     }
@@ -41,7 +41,7 @@ class BackendController {
    */
   async updateProd(req, res, next) {
     try {
-      await this.backendService.updateProd(req, res);
+      await this.backendService.updateProd(req, res, next);
     } catch (err) {
       next(err);
     }

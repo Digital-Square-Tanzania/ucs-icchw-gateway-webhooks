@@ -27,7 +27,7 @@ class FrontendController {
    */
   async updateTest(req, res, next) {
     try {
-      await this.frontendService.updateTest(req, res);
+      await this.frontendService.updateTest(req, res, next);
     } catch (err) {
       next(err);
     }
@@ -41,7 +41,7 @@ class FrontendController {
    */
   async updateProd(req, res, next) {
     try {
-      await this.frontendService.updateProd(req, res);
+      await this.frontendService.updateProd(req, res, next);
     } catch (err) {
       next(err);
     }

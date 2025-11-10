@@ -27,7 +27,7 @@ class PeersBackendController {
    */
   async updateTest(req, res, next) {
     try {
-      await this.peersBackendService.updateTest(req, res);
+      await this.peersBackendService.updateTest(req, res, next);
     } catch (err) {
       next(err);
     }
@@ -41,7 +41,7 @@ class PeersBackendController {
    */
   async updateProd(req, res, next) {
     try {
-      await this.peersBackendService.updateProd(req, res);
+      await this.peersBackendService.updateProd(req, res, next);
     } catch (err) {
       next(err);
     }
