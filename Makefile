@@ -90,7 +90,7 @@ deployPeersTestFrontend:
 	git stash && git checkout dev && \
 	git fetch && \
 	git merge origin/dev -m "Automerged by Makefile" && \
-	npm install --silent && \
+	npm install && \
 	npm run build && \
 	echo "$(tput setaf 3)Peers Test Frontend Deployment Completed.$(tput sgr0)" && cd -
 
@@ -100,7 +100,7 @@ deployPeersProdFrontend:
 	git stash && git checkout main && \
 	git fetch && \
 	git merge origin/main -m "Automerged by Makefile" && \
-	npm install --silent && \
+	npm install && \
 	npm run build && \
 	echo "$(tput setaf 3)Peers Prod Frontend Deployment Completed.$(tput sgr0)" && cd -
 
