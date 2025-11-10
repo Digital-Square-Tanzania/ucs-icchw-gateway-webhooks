@@ -59,3 +59,35 @@ deployProdWebhooks:
 	npm install --silent && \
 	pm2 restart gateway-webhooks && \
 	echo "$(tput setaf 3)Prod Webhooks Deployment Completed.$(tput sgr0)" && cd -
+
+
+# UCS Peers Registration Webhooks
+deployPeersTestBackend:
+	echo "$(tput setaf 2)Deploying Peers Test Backend...$(tput sgr0)"
+	cd /opt/ucs-peers-register-backend && \
+	git stash && git checkout -m dev && \
+	git fetch && \
+	git merge origin/dev -m "Automerged by Makefile" && \
+	npm install --silent && \
+	pm2 restart peers-backend && \
+	echo "$(tput setaf 3)Peers Test Backend Deployment Completed.$(tput sgr0)" && cd -
+
+deployPeersProdBackend:
+	echo "$(tput setaf 2)Deploying Peers Prod Backend...$(tput sgr0)"
+	cd /opt/ucs-peers-register-backend && \
+	git stash && git checkout -m main && \
+	git fetch && \
+	git merge origin/main -m "Automerged by Makefile" && \
+	npm install --silent && \
+	pm2 restart peers-backend && \
+	echo "$(tput setaf 3)Peers Prod Backend Deployment Completed.$(tput sgr0)" && cd -
+
+deployPeersTestFrontend:
+	echo "$(tput setaf 2)Deploying Peers Test Frontend...$(tput sgr0)"
+	cd /opt/ucs-peers-register-frontend && \
+	git stash && git checkout -m dev && \
+	git fetch && \
+	git merge origin/dev -m "Automerged by Makefile" && \
+	npm install --silent && \
+	npm run build --silent && \
+	echo "$(tput setaf 3)Peers Test Frontend Deployment Completed.$(tput sgr0)" && cd -
