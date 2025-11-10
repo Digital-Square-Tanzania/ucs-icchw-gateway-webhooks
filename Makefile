@@ -47,7 +47,7 @@ deployTestWebhooks:
 	git fetch && \
 	git merge origin/dev -m "Automerged by Makefile" && \
 	npm install --silent && \
-	pm2 restart gateway-webhooks && \
+	pm2 restart ucs-gateway-webhooks && \
 	echo "$(tput setaf 3)Test Webhooks Deployment Completed.$(tput sgr0)" && cd -
 
 deployProdWebhooks:
@@ -57,7 +57,7 @@ deployProdWebhooks:
 	git fetch && \
 	git merge origin/main -m "Automerged by Makefile" && \
 	npm install --silent && \
-	pm2 restart gateway-webhooks && \
+	pm2 restart ucs-gateway-webhooks && \
 	echo "$(tput setaf 3)Prod Webhooks Deployment Completed.$(tput sgr0)" && cd -
 
 
