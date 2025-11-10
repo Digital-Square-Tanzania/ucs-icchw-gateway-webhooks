@@ -60,6 +60,8 @@ class Server {
     const backendRouter = new BackendRouter();
     const frontendRouter = new FrontendRouter();
     const webhooksRouter = new WebhooksRouter();
+    const peersBackendRouter = new PeersBackendRouter();
+    const peersFrontendRouter = new PeersFrontendRouter();
 
     this.app.use("/api/v1/webhooks/icchw/backend", backendRouter.getRouter());
     this.app.use("/api/v1/webhooks/icchw/frontend", frontendRouter.getRouter());
