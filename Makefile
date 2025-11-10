@@ -3,7 +3,7 @@
 deployTestBackend:
 	echo "$(tput setaf 2)Deploying Test Backend...$(tput sgr0)"
 	cd /opt/ucs-icchw-gateway-backend && \
-	git stash && git checkout -m dev && \
+	git stash && git checkout -b dev && \
 	git fetch && \
 	git merge origin/dev -m "Automerged by Makefile" && \
 	npm install --silent && \
@@ -13,7 +13,7 @@ deployTestBackend:
 deployProdBackend:
 	echo "$(tput setaf 2)Deploying Prod Backend...$(tput sgr0)"
 	cd /opt/ucs-icchw-gateway-backend && \
-	git stash && git checkout -m main && \
+	git stash && git checkout -b main && \
 	git fetch && \
 	git merge origin/main -m "Automerged by Makefile" && \
 	npm install --silent && \
@@ -23,7 +23,7 @@ deployProdBackend:
 deployTestFrontend:
 	echo "$(tput setaf 2)Deploying Test Frontend...$(tput sgr0)"
 	cd /opt/ucs-icchw-gateway-frontend && \
-	git stash && git checkout -m dev && \
+	git stash && git checkout -b dev && \
 	git fetch && \
 	git merge origin/dev -m "Automerged by Makefile" && \
 	npm install --silent && \
@@ -33,7 +33,7 @@ deployTestFrontend:
 deployProdFrontend:
 	echo "$(tput setaf 2)Deploying Prod Frontend...$(tput sgr0)"
 	cd /opt/ucs-icchw-gateway-frontend && \
-	git stash && git checkout -m main && \
+	git stash && git checkout -b main && \
 	git fetch && \
 	git merge origin/main -m "Automerged by Makefile" && \
 	npm install --silent && \
@@ -43,7 +43,7 @@ deployProdFrontend:
 deployTestWebhooks:
 	echo "$(tput setaf 2)Deploying Test Webhooks...$(tput sgr0)"
 	cd /opt/ucs-icchw-gateway-webhooks && \
-	git stash && git checkout -m dev && \
+	git stash && git checkout -b dev && \
 	git fetch && \
 	git merge origin/dev -m "Automerged by Makefile" && \
 	npm install --silent && \
@@ -53,7 +53,7 @@ deployTestWebhooks:
 deployProdWebhooks:
 	echo "$(tput setaf 2)Deploying Prod Webhooks...$(tput sgr0)"
 	cd /opt/ucs-icchw-gateway-webhooks && \
-	git stash && git checkout -m main && \
+	git stash && git checkout -b main && \
 	git fetch && \
 	git merge origin/main -m "Automerged by Makefile" && \
 	npm install --silent && \
@@ -65,7 +65,7 @@ deployProdWebhooks:
 deployPeersTestBackend:
 	echo "$(tput setaf 2)Deploying Peers Test Backend...$(tput sgr0)"
 	cd /opt/ucs-peers-register-backend && \
-	git stash && git checkout -m dev && \
+	git stash && git checkout -b dev && \
 	git fetch && \
 	git merge origin/dev -m "Automerged by Makefile" && \
 	npm install --silent && \
@@ -76,7 +76,7 @@ deployPeersTestBackend:
 deployPeersProdBackend:
 	echo "$(tput setaf 2)Deploying Peers Prod Backend...$(tput sgr0)"
 	cd /opt/ucs-peers-register-backend && \
-	git stash && git checkout -m main && \
+	git stash && git checkout -b main && \
 	git fetch && \
 	git merge origin/main -m "Automerged by Makefile" && \
 	npm install --silent && \
@@ -87,7 +87,7 @@ deployPeersProdBackend:
 deployPeersTestFrontend:
 	echo "$(tput setaf 2)Deploying Peers Test Frontend...$(tput sgr0)"
 	cd /opt/ucs-peers-register-frontend && \
-	git stash && git checkout -m dev && \
+	git stash && git checkout -b dev && \
 	git fetch && \
 	git merge origin/dev -m "Automerged by Makefile" && \
 	npm install --silent && \
@@ -97,7 +97,7 @@ deployPeersTestFrontend:
 deployPeersProdFrontend:
 	echo "$(tput setaf 2)Deploying Peers Prod Frontend...$(tput sgr0)"
 	cd /opt/ucs-peers-register-frontend && \
-	git stash && git checkout -m main && \
+	git stash && git checkout -b main && \
 	git fetch && \
 	git merge origin/main -m "Automerged by Makefile" && \
 	npm install --silent && \
