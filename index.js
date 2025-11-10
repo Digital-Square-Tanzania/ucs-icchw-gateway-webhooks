@@ -15,6 +15,8 @@ import ErrorHelper from "./helpers/error-helper.js";
 import BackendRouter from "./routes/backend-router.js";
 import FrontendRouter from "./routes/frontend-router.js";
 import WebhooksRouter from "./routes/webhooks-router.js";
+import PeersBackendRouter from "./routes/peers-backend-router.js";
+import PeersFrontendRouter from "./routes/peers-frontend-router.js";
 
 /**
  * Class representing the server.
@@ -62,6 +64,8 @@ class Server {
     this.app.use("/api/v1/webhooks/icchw/backend", backendRouter.getRouter());
     this.app.use("/api/v1/webhooks/icchw/frontend", frontendRouter.getRouter());
     this.app.use("/api/v1/webhooks/icchw/webhooks", webhooksRouter.getRouter());
+    this.app.use("/api/v1/webhooks/peers/backend", peersBackendRouter.getRouter());
+    this.app.use("/api/v1/webhooks/peers/frontend", peersFrontendRouter.getRouter());
   }
 
   /**
