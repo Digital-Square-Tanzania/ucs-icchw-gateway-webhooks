@@ -91,3 +91,5 @@ deployPeersTestFrontend:
 	npm install --silent && \
 	npm run build --silent && \
 	echo "$(tput setaf 3)Peers Test Frontend Deployment Completed.$(tput sgr0)" && cd -
+
+	
