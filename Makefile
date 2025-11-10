@@ -69,7 +69,8 @@ deployPeersTestBackend:
 	git fetch && \
 	git merge origin/dev -m "Automerged by Makefile" && \
 	npm install --silent && \
-	pm2 restart peers-backend && \
+	npm run build --silent && \
+	pm2 restart ucs-peers-backend && \
 	echo "$(tput setaf 3)Peers Test Backend Deployment Completed.$(tput sgr0)" && cd -
 
 deployPeersProdBackend:
@@ -79,7 +80,8 @@ deployPeersProdBackend:
 	git fetch && \
 	git merge origin/main -m "Automerged by Makefile" && \
 	npm install --silent && \
-	pm2 restart peers-backend && \
+	npm run build --silent && \
+	pm2 restart ucs-peers-backend && \
 	echo "$(tput setaf 3)Peers Prod Backend Deployment Completed.$(tput sgr0)" && cd -
 
 deployPeersTestFrontend:
