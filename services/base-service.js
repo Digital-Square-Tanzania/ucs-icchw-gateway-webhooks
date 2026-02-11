@@ -38,7 +38,7 @@ class BaseService {
   async handleUpdate(req, res, next, branchEnvVar, commandArgs) {
     try {
       if (!this.verifySignature.verify(req)) {
-        console.log("Unauthorized");
+        console.log("Webhook Event Not Authorized");
         console.log(req.get("X-GitHub-Event"));
         console.log(req.get("X-GitHub-Delivery"));
         return ResponseHelper.api(req, res, 401, false, "Unauthorized", null);
@@ -49,7 +49,6 @@ class BaseService {
         console.log("Webhook Event Authorized");
         this.spawnCommand.run("make", commandArgs, ".", req, res, next);
       } else {
-        console.log("Webhook Event Not Authorized");
         ResponseHelper.api(req, res, 200, true, "Ignoring non-push or non-target branch event.", null);
       }
     } catch (err) {
