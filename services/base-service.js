@@ -39,22 +39,17 @@ class BaseService {
     try {
       if (!this.verifySignature.verify(req)) {
         console.log("Unauthorized");
-        console.log(req.body);
-        console.log(req.headers);
         console.log(req.get("X-GitHub-Event"));
         console.log(req.get("X-GitHub-Delivery"));
-        console.log(req.get("X-GitHub-Signature"));
-        console.log(req.get("X-GitHub-Signature-256"));
-        console.log(req.get("X-GitHub-Signature-384"));
-        console.log(req.get("X-GitHub-Signature-512"));
-        console.log("Expected Signature", this.verifySignature.verify(req));
         return ResponseHelper.api(req, res, 401, false, "Unauthorized", null);
       }
 
       const event = req.get("X-GitHub-Event");
       if (event === "push" && req.body.ref === `refs/heads/${process.env[branchEnvVar]}`) {
+        console.log("Webhook Event Authorized");
         this.spawnCommand.run("make", commandArgs, ".", req, res, next);
       } else {
+        console.log("Webhook Event Not Authorized");
         ResponseHelper.api(req, res, 200, true, "Ignoring non-push or non-target branch event.", null);
       }
     } catch (err) {
