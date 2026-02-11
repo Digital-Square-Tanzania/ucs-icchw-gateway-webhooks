@@ -57,6 +57,16 @@ class Server {
    * Initialize route handling for the Express app.
    */
   initializeRouteHandling() {
+    // API V1 Health Check Route
+    this.app.get("/api/v1/health", (req, res) => {
+      res.status(200).json({
+        status: "UP",
+        service: process.env.SERVICE_NAME || "Gateway Webhooks Service",
+        timestamp: new Date().toISOString(),
+      });
+    });
+
+    // API V1 Routes
     const backendRouter = new BackendRouter();
     const frontendRouter = new FrontendRouter();
     const webhooksRouter = new WebhooksRouter();
