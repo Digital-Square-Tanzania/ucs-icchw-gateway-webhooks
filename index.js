@@ -10,7 +10,6 @@ import express from "express";
 import dotenv from "dotenv";
 dotenv.config({ path: `.env.local`, override: true });
 import bodyParser from "body-parser";
-import os from "os";
 
 import ErrorHelper from "./helpers/error-helper.js";
 import BackendRouter from "./routes/backend-router.js";
@@ -60,50 +59,11 @@ class Server {
   initializeRouteHandling() {
     // API V1 Health Check Route
     this.app.get("/api/v1/health", (req, res) => {
-      const uptimeSeconds = process.uptime();
-
-      // Calculate uptime in a readable format
-      const days = Math.floor(uptimeSeconds / (24 * 3600));
-      const hours = Math.floor((uptimeSeconds % (24 * 3600)) / 3600);
-      const minutes = Math.floor((uptimeSeconds % 3600) / 60);
-      const seconds = Math.floor(uptimeSeconds % 60);
-
-      const healthData = {
+      res.status(200).json({
         status: "UP",
         service: process.env.SERVICE_NAME || "Gateway Webhooks Service",
         timestamp: new Date().toISOString(),
-        details: {
-          uptime: `${days}d ${hours}h ${minutes}m ${seconds}s`,
-          process: {
-            pid: process.pid,
-            memoryUsage: {
-              rss: `${Math.round(process.memoryUsage().rss / 1024 / 1024)} MB`,
-              heapTotal: `${Math.round(process.memoryUsage().heapTotal / 1024 / 1024)} MB`,
-              heapUsed: `${Math.round(process.memoryUsage().heapUsed / 1024 / 1024)} MB`,
-            },
-            nodeVersion: process.version,
-          },
-          system: {
-            platform: process.platform,
-            loadAverage: os.loadavg(), // Returns 1, 5, and 15 minute load averages
-            freeMemory: `${Math.round(os.freemem() / 1024 / 1024)} MB`,
-            totalMemory: `${Math.round(os.totalmem() / 1024 / 1024)} MB`,
-          },
-          environment: {
-            nodeEnv: process.env.NODE_ENV || "development",
-            port: this.port,
-          },
-        },
-      };
-
-      // Optional: Add logic to change status to "DEGRADED" if memory is too high
-      const memoryThreshold = 0.9; // 90%
-      if (os.freemem() / os.totalmem() < 1 - memoryThreshold) {
-        healthData.status = "DEGRADED";
-        healthData.message = "System memory is running critically low.";
-      }
-
-      res.status(healthData.status === "UP" ? 200 : 503).json(healthData);
+      });
     });
 
     // API V1 Routes
