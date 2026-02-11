@@ -38,6 +38,16 @@ class BaseService {
   async handleUpdate(req, res, next, branchEnvVar, commandArgs) {
     try {
       if (!this.verifySignature.verify(req)) {
+        console.log("Unauthorized");
+        console.log(req.body);
+        console.log(req.headers);
+        console.log(req.get("X-GitHub-Event"));
+        console.log(req.get("X-GitHub-Delivery"));
+        console.log(req.get("X-GitHub-Signature"));
+        console.log(req.get("X-GitHub-Signature-256"));
+        console.log(req.get("X-GitHub-Signature-384"));
+        console.log(req.get("X-GitHub-Signature-512"));
+        console.log("Expected Signature", this.verifySignature.verify(req));
         return ResponseHelper.api(req, res, 401, false, "Unauthorized", null);
       }
 
