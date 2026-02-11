@@ -38,21 +38,28 @@ class BaseService {
   async handleUpdate(req, res, next, branchEnvVar, commandArgs) {
     try {
       if (!this.verifySignature.verify(req)) {
-        console.log("Webhook Event Not Authorized");
-        console.log(req.get("X-GitHub-Event"));
-        console.log(req.get("X-GitHub-Delivery"));
         return ResponseHelper.api(req, res, 401, false, "Unauthorized", null);
       }
 
       const event = req.get("X-GitHub-Event");
-      if (event === "push" && req.body.ref === `refs/heads/${process.env[branchEnvVar]}`) {
-        console.log("Webhook Event Authorized");
-        this.spawnCommand.run("make", commandArgs, ".", req, res, next);
+      const targetBranch = process.env[branchEnvVar];
+
+      if (event === "push" && req.body.ref === `refs/heads/${targetBranch}`) {
+        // 1. Send response to GitHub/Nginx FIRST
+        ResponseHelper.api(req, res, 202, true, "Deployment started.", null);
+
+        // 2. Trigger the command in the background
+        // Use setImmediate or simply don't await/return the spawn
+        setImmediate(() => {
+          this.spawnCommand.run("make", commandArgs, ".", req, res, next);
+        });
       } else {
-        ResponseHelper.api(req, res, 200, true, "Ignoring non-push or non-target branch event.", null);
+        ResponseHelper.api(req, res, 200, true, "Ignoring event.", null);
       }
     } catch (err) {
-      this.errorHelper.handleError(err, req, res, next);
+      // Note: If response was already sent, this might error.
+      // Usually better to log here since res is gone.
+      console.error("Update Error:", err);
     }
   }
 }
