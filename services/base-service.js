@@ -37,6 +37,7 @@ class BaseService {
    */
   async handleUpdate(req, res, next, branchEnvVar, commandArgs) {
     try {
+      // 1. Validation Logic
       if (!this.verifySignature.verify(req)) {
         return ResponseHelper.api(req, res, 401, false, "Unauthorized", null);
       }
@@ -45,21 +46,27 @@ class BaseService {
       const targetBranch = process.env[branchEnvVar];
 
       if (event === "push" && req.body.ref === `refs/heads/${targetBranch}`) {
-        // 1. Send response to GitHub/Nginx FIRST
-        ResponseHelper.api(req, res, 202, true, "Deployment started.", null);
+        // 2. Respond to GitHub IMMEDIATELY
+        // This prevents the 502 Bad Gateway during self-restart
+        ResponseHelper.api(req, res, 202, true, "Deployment initiated", { command: commandArgs[0] });
 
-        // 2. Trigger the command in the background
-        // Use setImmediate or simply don't await/return the spawn
-        setImmediate(() => {
-          this.spawnCommand.run("make", commandArgs, ".", req, res, next);
+        // 3. Execute the heavy lifting in a "fire-and-forget" block
+        // We do NOT 'await' this, but we MUST catch its internal errors
+        this.spawnCommand.run("make", commandArgs, ".", req).catch((err) => {
+          // Since res is already sent, we log the error instead of passing to next()
+          console.error(`[DEPLOYMENT ERROR] Failed to run ${commandArgs}:`, err.message);
         });
       } else {
-        ResponseHelper.api(req, res, 200, true, "Ignoring event.", null);
+        ResponseHelper.api(req, res, 200, true, "Ignoring non-target event.", null);
       }
     } catch (err) {
-      // Note: If response was already sent, this might error.
-      // Usually better to log here since res is gone.
-      console.error("Update Error:", err);
+      // This catch only triggers if the validation logic above fails
+      // BEFORE the response is sent.
+      if (!res.headersSent) {
+        this.errorHelper.handleError(err, req, res, next);
+      } else {
+        console.error("[CRITICAL ERROR] Error after response sent:", err);
+      }
     }
   }
 }
