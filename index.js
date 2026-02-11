@@ -66,8 +66,8 @@ class Server {
     this.app.use("/api/v1/webhooks/icchw/backend", backendRouter.getRouter());
     this.app.use("/api/v1/webhooks/icchw/frontend", frontendRouter.getRouter());
     this.app.use("/api/v1/webhooks/icchw/webhooks", webhooksRouter.getRouter());
-    this.app.use("/api/v1/webhooks/peers/backend", peersBackendRouter.getRouter());
-    this.app.use("/api/v1/webhooks/peers/frontend", peersFrontendRouter.getRouter());
+    this.app.use("/api/v1/peers/backend", peersBackendRouter.getRouter());
+    this.app.use("/api/v1/peers/frontend", peersFrontendRouter.getRouter());
   }
 
   /**
