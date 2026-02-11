@@ -4,6 +4,7 @@
  * @name BaseService
  * @description This file contains the BaseService class which provides common methods to handle update operations for both frontend and backend services, including signature verification and command execution.
  * @autor Kizito Mrema
+ * @date 2026-02-11
  */
 
 import ErrorHelper from "../helpers/error-helper.js";
