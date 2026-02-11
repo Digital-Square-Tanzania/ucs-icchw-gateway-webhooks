@@ -1,107 +1,119 @@
-# Version 20240804 Added other deploy paths
+# Version 20240804.1 - Fixed for Headless/Webhook Execution
+# This version handles the lack of TTY/TERM variables gracefully.
 
+# --- Terminal Color Setup ---
+# We check if TERM is set; if not, we default to empty strings to prevent tput errors.
+ifeq ($(TERM),)
+  GREEN  := 
+  YELLOW := 
+  RESET  := 
+else
+  GREEN  := $(shell tput setaf 2)
+  YELLOW := $(shell tput setaf 3)
+  RESET  := $(shell tput sgr0)
+endif
+
+# --- Common Logic ---
+# Using a variable for the merge message to keep things clean
+MERGE_MSG := "Automerged by Makefile"
+
+.PHONY: deployTestBackend deployProdBackend deployTestFrontend deployProdFrontend \
+        deployTestWebhooks deployProdWebhooks deployPeersTestBackend \
+        deployPeersProdBackend deployPeersTestFrontend deployPeersProdFrontend
+
+# --- Gateway Backend ---
 deployTestBackend:
-	echo "$(tput setaf 2)Deploying Test Backend...$(tput sgr0)"
+	@echo "$(GREEN)Deploying Test Backend...$(RESET)"
 	cd /opt/ucs-icchw-gateway-backend && \
 	git stash && git checkout dev && \
-	git fetch && \
-	git merge origin/dev -m "Automerged by Makefile" && \
+	git fetch && git merge origin/dev -m $(MERGE_MSG) && \
 	npm install --silent && \
 	pm2 restart gateway-backend && \
-	echo "$(tput setaf 3)Test Backend Deployment Completed.$(tput sgr0)" && cd -
+	echo "$(YELLOW)Test Backend Deployment Completed.$(RESET)"
 
 deployProdBackend:
-	echo "$(tput setaf 2)Deploying Prod Backend...$(tput sgr0)"
+	@echo "$(GREEN)Deploying Prod Backend...$(RESET)"
 	cd /opt/ucs-icchw-gateway-backend && \
 	git stash && git checkout main && \
-	git fetch && \
-	git merge origin/main -m "Automerged by Makefile" && \
+	git fetch && git merge origin/main -m $(MERGE_MSG) && \
 	npm install --silent && \
 	pm2 restart gateway-backend && \
-	echo "$(tput setaf 3)Prod Backend Deployment Completed.$(tput sgr0)" && cd -
+	echo "$(YELLOW)Prod Backend Deployment Completed.$(RESET)"
 
+# --- Gateway Frontend ---
 deployTestFrontend:
-	echo "$(tput setaf 2)Deploying Test Frontend...$(tput sgr0)"
+	@echo "$(GREEN)Deploying Test Frontend...$(RESET)"
 	cd /opt/ucs-icchw-gateway-frontend && \
 	git stash && git checkout dev && \
-	git fetch && \
-	git merge origin/dev -m "Automerged by Makefile" && \
+	git fetch && git merge origin/dev -m $(MERGE_MSG) && \
 	npm install --silent && \
 	npm run build --silent && \
-	echo "$(tput setaf 3)Test Frontend Deployment Completed.$(tput sgr0)" && cd -
+	echo "$(YELLOW)Test Frontend Deployment Completed.$(RESET)"
 
 deployProdFrontend:
-	echo "$(tput setaf 2)Deploying Prod Frontend...$(tput sgr0)"
+	@echo "$(GREEN)Deploying Prod Frontend...$(RESET)"
 	cd /opt/ucs-icchw-gateway-frontend && \
 	git stash && git checkout main && \
-	git fetch && \
-	git merge origin/main -m "Automerged by Makefile" && \
+	git fetch && git merge origin/main -m $(MERGE_MSG) && \
 	npm install --silent && \
 	npm run build --silent && \
-	echo "$(tput setaf 3)Prod Frontend Deployment Completed.$(tput sgr0)" && cd -
+	echo "$(YELLOW)Prod Frontend Deployment Completed.$(RESET)"
 
+# --- Gateway Webhooks ---
 deployTestWebhooks:
-	echo "$(tput setaf 2)Deploying Test Webhooks...$(tput sgr0)"
+	@echo "$(GREEN)Deploying Test Webhooks...$(RESET)"
 	cd /opt/ucs-icchw-gateway-webhooks && \
 	git stash && git checkout dev && \
-	git fetch && \
-	git merge origin/dev -m "Automerged by Makefile" && \
+	git fetch && git merge origin/dev -m $(MERGE_MSG) && \
 	npm install --silent && \
 	pm2 restart ucs-gateway-webhooks && \
-	echo "$(tput setaf 3)Test Webhooks Deployment Completed.$(tput sgr0)" && cd -
+	echo "$(YELLOW)Test Webhooks Deployment Completed.$(RESET)"
 
 deployProdWebhooks:
-	echo "$(tput setaf 2)Deploying Prod Webhooks...$(tput sgr0)"
+	@echo "$(GREEN)Deploying Prod Webhooks...$(RESET)"
 	cd /opt/ucs-icchw-gateway-webhooks && \
 	git stash && git checkout main && \
-	git fetch && \
-	git merge origin/main -m "Automerged by Makefile" && \
+	git fetch && git merge origin/main -m $(MERGE_MSG) && \
 	npm install --silent && \
 	pm2 restart ucs-gateway-webhooks && \
-	echo "$(tput setaf 3)Prod Webhooks Deployment Completed.$(tput sgr0)" && cd -
+	echo "$(YELLOW)Prod Webhooks Deployment Completed.$(RESET)"
 
-
-# UCS Peers Registration Webhooks
+# --- UCS Peers Registration Backend ---
 deployPeersTestBackend:
-	echo "$(tput setaf 2)Deploying Peers Test Backend...$(tput sgr0)"
+	@echo "$(GREEN)Deploying Peers Test Backend...$(RESET)"
 	cd /opt/ucs-peers-register-backend && \
 	git stash && git checkout dev && \
-	git fetch && \
-	git merge origin/dev -m "Automerged by Makefile" && \
+	git fetch && git merge origin/dev -m $(MERGE_MSG) && \
 	npm install --silent && \
-	npm run build --silent && \
+	npm run build && \
 	pm2 restart ucs-peers-backend && \
-	echo "$(tput setaf 3)Peers Test Backend Deployment Completed.$(tput sgr0)" && cd -
+	echo "$(YELLOW)Peers Test Backend Deployment Completed.$(RESET)"
 
 deployPeersProdBackend:
-	echo "$(tput setaf 2)Deploying Peers Prod Backend...$(tput sgr0)"
+	@echo "$(GREEN)Deploying Peers Prod Backend...$(RESET)"
 	cd /opt/ucs-peers-register-backend && \
 	git stash && git checkout main && \
-	git fetch && \
-	git merge origin/main -m "Automerged by Makefile" && \
+	git fetch && git merge origin/main -m $(MERGE_MSG) && \
 	npm install --silent && \
 	npm run build --silent && \
 	pm2 restart ucs-peers-backend && \
-	echo "$(tput setaf 3)Peers Prod Backend Deployment Completed.$(tput sgr0)" && cd -
+	echo "$(YELLOW)Peers Prod Backend Deployment Completed.$(RESET)"
 
+# --- UCS Peers Registration Frontend ---
 deployPeersTestFrontend:
-	echo "$(tput setaf 2)Deploying Peers Test Frontend...$(tput sgr0)"
+	@echo "$(GREEN)Deploying Peers Test Frontend...$(RESET)"
 	cd /opt/ucs-peers-register-frontend && \
 	git stash && git checkout dev && \
-	git fetch && \
-	git merge origin/dev -m "Automerged by Makefile" && \
+	git fetch && git merge origin/dev -m $(MERGE_MSG) && \
 	npm install && \
 	npm run build && \
-	echo "$(tput setaf 3)Peers Test Frontend Deployment Completed.$(tput sgr0)" && cd -
+	echo "$(YELLOW)Peers Test Frontend Deployment Completed.$(RESET)"
 
 deployPeersProdFrontend:
-	echo "$(tput setaf 2)Deploying Peers Prod Frontend...$(tput sgr0)"
+	@echo "$(GREEN)Deploying Peers Prod Frontend...$(RESET)"
 	cd /opt/ucs-peers-register-frontend && \
 	git stash && git checkout main && \
-	git fetch && \
-	git merge origin/main -m "Automerged by Makefile" && \
+	git fetch && git merge origin/main -m $(MERGE_MSG) && \
 	npm install && \
 	npm run build && \
-	echo "$(tput setaf 3)Peers Prod Frontend Deployment Completed.$(tput sgr0)" && cd -
-
-	
+	echo "$(YELLOW)Peers Prod Frontend Deployment Completed.$(RESET)"
