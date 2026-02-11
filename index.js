@@ -113,9 +113,9 @@ class Server {
     const peersBackendRouter = new PeersBackendRouter();
     const peersFrontendRouter = new PeersFrontendRouter();
 
-    this.app.use("/api/v1/webhooks/icchw/backend", backendRouter.getRouter());
-    this.app.use("/api/v1/webhooks/icchw/frontend", frontendRouter.getRouter());
-    this.app.use("/api/v1/webhooks/icchw/webhooks", webhooksRouter.getRouter());
+    this.app.use("/api/v1/icchw/backend", backendRouter.getRouter());
+    this.app.use("/api/v1/icchw/frontend", frontendRouter.getRouter());
+    this.app.use("/api/v1/webhooks/backend", webhooksRouter.getRouter());
     this.app.use("/api/v1/peers/backend", peersBackendRouter.getRouter());
     this.app.use("/api/v1/peers/frontend", peersFrontendRouter.getRouter());
   }
