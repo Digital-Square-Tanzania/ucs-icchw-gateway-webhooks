@@ -105,7 +105,7 @@ deployPeersTestFrontend:
 	cd /opt/ucs-peers-register-frontend && \
 	git stash && git checkout dev && \
 	git fetch && git merge origin/dev -m $(MERGE_MSG) && \
-	npm install && \
+	npm install --silent && \
 	npm run build && \
 	echo "$(YELLOW)Peers Test Frontend Deployment Completed.$(RESET)"
 
@@ -114,6 +114,6 @@ deployPeersProdFrontend:
 	cd /opt/ucs-peers-register-frontend && \
 	git stash && git checkout main && \
 	git fetch && git merge origin/main -m $(MERGE_MSG) && \
-	npm install && \
+	npm install --silent && \
 	npm run build && \
 	echo "$(YELLOW)Peers Prod Frontend Deployment Completed.$(RESET)"
