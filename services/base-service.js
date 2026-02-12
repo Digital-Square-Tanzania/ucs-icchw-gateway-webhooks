@@ -53,7 +53,7 @@ class BaseService {
 
         // 3. Execute the heavy lifting in a "fire-and-forget" block
         // We do NOT 'await' this, but we MUST catch its internal errors
-        this.spawnCommand.run("make", commandArgs, ".", req).catch((err) => {
+        this.spawnCommand.run("make", commandArgs, ".", req, null, null).catch((err) => {
           // Since res is already sent, we log the error instead of passing to next()
           console.error(`[DEPLOYMENT ERROR] Failed to run ${commandArgs}:`, err.message);
         });

@@ -9,7 +9,6 @@
 import { spawn } from "child_process";
 
 import ErrorHelper from "./error-helper.js";
-import ResponseHelper from "./response-helper.js";
 
 /**
  * Class representing a command executor.
@@ -32,36 +31,47 @@ class SpawnCommand {
    * @param {Function} next - The next middleware function.
    */
   run(command, args, cwd, req, res, next) {
-    const process = spawn(command, args, { cwd, shell: true });
+    return new Promise((resolve, reject) => {
+      const process = spawn(command, args, { cwd, shell: true });
 
-    let output = "";
-    let errorOutput = "";
+      let output = "";
+      let errorOutput = "";
 
-    process.stdout.on("data", (data) => {
-      output += data.toString();
-      console.log(data.toString());
-    });
+      process.stdout.on("data", (data) => {
+        output += data.toString();
+        console.log(data.toString());
+      });
 
-    process.stderr.on("data", (data) => {
-      errorOutput += data.toString();
-      console.error(data.toString());
-    });
+      process.stderr.on("data", (data) => {
+        errorOutput += data.toString();
+        console.error(data.toString());
+      });
 
-    process.on("close", (code) => {
-      const message = `${command} exited with code ${code}`;
-      console.log(message);
+      process.on("close", (code) => {
+        const message = `${command} exited with code ${code}`;
+        console.log(message);
 
-      // Send response to GitHub only once, clean and structured
-      if (code === 0) {
-        ResponseHelper.api(req, res, 200, true, "Command executed successfully.", null);
-      } else {
-        ResponseHelper.api(req, res, 500, false, "Command failed.", { output, errorOutput });
-      }
-    });
+        if (code === 0) {
+          resolve({ code, output, errorOutput });
+          return;
+        }
 
-    process.on("error", (err) => {
-      console.error(`Spawn error: ${err.message}`);
-      this.errorHelper.handleError(err, req, res, next);
+        const error = new Error("Command failed.");
+        error.code = code;
+        error.output = output;
+        error.errorOutput = errorOutput;
+        reject(error);
+      });
+
+      process.on("error", (err) => {
+        console.error(`Spawn error: ${err.message}`);
+
+        if (res && !res.headersSent) {
+          this.errorHelper.handleError(err, req, res, next);
+        }
+
+        reject(err);
+      });
     });
   }
 }

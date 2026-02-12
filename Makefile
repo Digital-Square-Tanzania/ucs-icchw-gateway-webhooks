@@ -84,7 +84,7 @@ deployPeersTestBackend:
 	cd /opt/ucs-peers-register-backend && \
 	git stash && git checkout dev && \
 	git fetch && git merge origin/dev -m $(MERGE_MSG) && \
-	npm install --silent && \
+	npm install --silent --include=dev && \
 	npm run build && \
 	pm2 restart ucs-peers-backend && \
 	echo "$(YELLOW)Peers Test Backend Deployment Completed.$(RESET)"
@@ -94,7 +94,7 @@ deployPeersProdBackend:
 	cd /opt/ucs-peers-register-backend && \
 	git stash && git checkout main && \
 	git fetch && git merge origin/main -m $(MERGE_MSG) && \
-	npm install --silent && \
+	npm install --silent --include=dev && \
 	npm run build --silent && \
 	pm2 restart ucs-peers-backend && \
 	echo "$(YELLOW)Peers Prod Backend Deployment Completed.$(RESET)"
