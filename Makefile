@@ -115,7 +115,6 @@ deployPeersTestFrontend:
 	git fetch && git merge origin/dev -m $(MERGE_MSG) && \
 	npm install --silent && \
 	npm audit fix && \
-	nvm use --lts && \
 	npm run build && \
 	echo "$(YELLOW)Peers Test Frontend Deployment Completed.$(RESET)"
 
@@ -126,6 +125,5 @@ deployPeersProdFrontend:
 	git fetch && git merge origin/main -m $(MERGE_MSG) && \
 	npm install --silent && \
 	npm audit fix && \
-	nvm use --lts && \
 	npm run build && \
 	echo "$(YELLOW)Peers Prod Frontend Deployment Completed.$(RESET)"
