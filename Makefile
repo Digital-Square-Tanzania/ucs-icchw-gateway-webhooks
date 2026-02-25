@@ -28,7 +28,6 @@ deployTestBackend:
 	git stash && git checkout dev && \
 	git fetch && git merge origin/dev -m $(MERGE_MSG) && \
 	npm install --silent && \
-	npm audit fix && \
 	pm2 restart gateway-backend && \
 	echo "$(YELLOW)Test Backend Deployment Completed.$(RESET)"
 
@@ -38,7 +37,6 @@ deployProdBackend:
 	git stash && git checkout main && \
 	git fetch && git merge origin/main -m $(MERGE_MSG) && \
 	npm install --silent && \
-	npm audit fix && \
 	pm2 restart gateway-backend && \
 	echo "$(YELLOW)Prod Backend Deployment Completed.$(RESET)"
 
@@ -49,7 +47,6 @@ deployTestFrontend:
 	git stash && git checkout dev && \
 	git fetch && git merge origin/dev -m $(MERGE_MSG) && \
 	npm install --silent && \
-	npm audit fix && \
 	npm run build && \
 	echo "$(YELLOW)Test Frontend Deployment Completed.$(RESET)"
 
@@ -59,7 +56,6 @@ deployProdFrontend:
 	git stash && git checkout main && \
 	git fetch && git merge origin/main -m $(MERGE_MSG) && \
 	npm install --silent && \
-	npm audit fix && \
 	npm run build && \
 	echo "$(YELLOW)Prod Frontend Deployment Completed.$(RESET)"
 
@@ -70,7 +66,6 @@ deployTestWebhooks:
 	git stash && git checkout dev && \
 	git fetch && git merge origin/dev -m $(MERGE_MSG) && \
 	npm install --silent && \
-	npm audit fix && \
 	pm2 restart ucs-gateway-webhooks && \
 	echo "$(YELLOW)Test Webhooks Deployment Completed.$(RESET)"
 
@@ -80,7 +75,6 @@ deployProdWebhooks:
 	git stash && git checkout main && \
 	git fetch && git merge origin/main -m $(MERGE_MSG) && \
 	npm install --silent && \
-	npm audit fix && \
 	pm2 restart ucs-gateway-webhooks && \
 	echo "$(YELLOW)Prod Webhooks Deployment Completed.$(RESET)"
 
@@ -91,7 +85,6 @@ deployPeersTestBackend:
 	git stash && git checkout dev && \
 	git fetch && git merge origin/dev -m $(MERGE_MSG) && \
 	npm install --silent --include=dev && \
-	npm audit fix && \
 	npm run build && \
 	pm2 restart ucs-peers-backend && \
 	echo "$(YELLOW)Peers Test Backend Deployment Completed.$(RESET)"
@@ -102,7 +95,6 @@ deployPeersProdBackend:
 	git stash && git checkout main && \
 	git fetch && git merge origin/main -m $(MERGE_MSG) && \
 	npm install --silent --include=dev && \
-	npm audit fix && \
 	npm run build --silent && \
 	pm2 restart ucs-peers-backend && \
 	echo "$(YELLOW)Peers Prod Backend Deployment Completed.$(RESET)"
@@ -114,7 +106,6 @@ deployPeersTestFrontend:
 	git stash && git checkout dev && \
 	git fetch && git merge origin/dev -m $(MERGE_MSG) && \
 	npm install --silent && \
-	npm audit fix && \
 	npm run build && \
 	echo "$(YELLOW)Peers Test Frontend Deployment Completed.$(RESET)"
 
@@ -124,6 +115,5 @@ deployPeersProdFrontend:
 	git stash && git checkout main && \
 	git fetch && git merge origin/main -m $(MERGE_MSG) && \
 	npm install --silent && \
-	npm audit fix && \
 	npm run build && \
 	echo "$(YELLOW)Peers Prod Frontend Deployment Completed.$(RESET)"
