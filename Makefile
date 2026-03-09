@@ -28,7 +28,7 @@ deployTestBackend:
 	git stash && git checkout dev && \
 	git fetch && git merge origin/dev -m $(MERGE_MSG) && \
 	npm install --silent && \
-	pm2 restart gateway-backend && \
+	pm2 restart ucs-gateway-backend && \
 	echo "$(YELLOW)Test Backend Deployment Completed.$(RESET)"
 
 deployProdBackend:
@@ -37,7 +37,7 @@ deployProdBackend:
 	git stash && git checkout main && \
 	git fetch && git merge origin/main -m $(MERGE_MSG) && \
 	npm install --silent && \
-	pm2 restart gateway-backend && \
+	pm2 restart ucs-gateway-backend && \
 	echo "$(YELLOW)Prod Backend Deployment Completed.$(RESET)"
 
 # --- Gateway Frontend ---
